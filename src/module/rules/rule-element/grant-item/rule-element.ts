@@ -56,7 +56,7 @@ class GrantItemRuleElement extends RuleElementPF2e<GrantItemSchema> {
         }
 
         if (item.isOfType("physical")) {
-            this.failValidation("parent item must not be physical");
+            this.allowDuplicate = false;
         }
     }
 

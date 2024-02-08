@@ -433,11 +433,16 @@ function getStrikeDamageDomains(
     }
 
     if (actor.isOfType("character", "npc")) {
-        const strengthBasedDamage =
-            weapon.isMelee || (weapon.isThrown && !traits.has("splash")) || traits.has("propulsive");
+
+        const strengthBasedDamage = weapon.isMelee || (weapon.isThrown && !traits.has("splash")) || traits.has("brutal") || traits.has("propulsive");
+        const dexBasedDamage = weapon.isRanged || traits.has("finesse") || traits.has("agile");
+
+        const dexAttributeModifier = dexBasedDamage ? createAttributeModifier({ actor, attribute: "dex", domains }) : null;
+        dexAttributeModifier != null ? dexAttributeModifier.modifier = Math.floor(dexAttributeModifier.modifier / 2) : null;
 
         const attributeModifier = [
             strengthBasedDamage ? createAttributeModifier({ actor, attribute: "str", domains }) : null,
+            dexAttributeModifier,
             ...extractModifiers(actor.synthetics, domains, {
                 resolvables: { weapon },
                 test: [...actor.getRollOptions(domains), ...weapon.getRollOptions("item")],

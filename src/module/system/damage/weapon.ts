@@ -127,17 +127,20 @@ class WeaponDamagePF2e {
         if (actor.isOfType("character") && weapon.isOfType("weapon")) {
             const attributeDomains = ATTRIBUTE_ABBREVIATIONS.map((a) => `${a}-damage`);
             const domain = domains.find((d) => attributeDomains.has(d));
+
             const strengthModValue = actor.abilities.str.mod;
+            const dexModValue = actor.abilities.dex.mod;
+
             const modifierValue =
-                domain === "str-damage"
-                    ? strengthModValue < 0 || !weaponTraits.some((t) => t === "propulsive")
-                        ? strengthModValue
-                        : Math.floor(strengthModValue / 2)
-                    : null;
+                domain === "str-damage" ? strengthModValue < 0 || !weaponTraits.some((t) => t === "thrown") ?
+                    strengthModValue : Math.floor(strengthModValue / 2) :
+                domain === "dex-damage" ? Math.floor(dexModValue / 2) : null;
 
             if (typeof modifierValue === "number") {
-                const strModifier = createAttributeModifier({ actor, attribute: "str", domains, max: modifierValue });
-                modifiers.push(strModifier);
+                const modifier =
+                    domain === "str-damage" ? createAttributeModifier({ actor, attribute: "str", domains, max: modifierValue })
+                        : createAttributeModifier({ actor, attribute: "dex", domains, max: modifierValue });
+                modifiers.push(modifier);
             }
         }
 

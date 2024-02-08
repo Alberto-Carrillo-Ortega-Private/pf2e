@@ -490,13 +490,15 @@ class ElementalBlast {
         if (!item.range) return null;
         const strengthModValue = this.actor.abilities.str.mod;
         const { traits } = item;
-        const modifierValue = traits.has("thrown")
+        const modifierValue = traits.has("brutal")
             ? strengthModValue
-            : traits.has("propulsive")
-              ? strengthModValue < 0
-                  ? strengthModValue
-                  : Math.floor(strengthModValue / 2)
-              : null;
+            : traits.has("thrown")
+              ? Math.floor(strengthModValue / 2)
+              : traits.has("propulsive")
+                ? strengthModValue < 0
+                    ? strengthModValue
+                    : Math.floor(strengthModValue / 2)
+                : null;
 
         return typeof modifierValue === "number"
             ? new ModifierPF2e({

@@ -743,6 +743,7 @@ const weaponActionTraits = R.pick(weaponTraits, [
     "forceful",
     "reach",
     "sweep",
+    "brutal",
     "thrown",
     "volley-20",
     "volley-30",
